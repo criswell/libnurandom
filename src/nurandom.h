@@ -25,6 +25,8 @@
  *
  * nurandom is a random number library that pulls random numbers from  a
  * variety of external sources.
+ *
+ * Its homepage can be found here https://bitbucket.org/criswell/libnurandom .
  */
 
 #ifndef nurandom_H
@@ -39,7 +41,7 @@ struct NuRandom_ExternalSources
     //! Use /dev/urandom (T/F)
     bool Urandom;
 
-    //! Use random.org
+    //! Use random.org (T/F)
     bool RandomOrg
 };
 
@@ -49,6 +51,10 @@ class NuRandom
         int64_t numPool[MEMORY_POOL_SIZE];
 
         int currentCount;
+
+        NuRandom_ExternalSources mySources;
+
+        void setSources(NuRanndom_ExternalSources sources);
 
     public:
         //! Default constructor for nurandom class
@@ -68,6 +74,16 @@ class NuRandom
 
         //! Destructor for nurandom class
         ~NuRandom();
+
+        //! Set the external sources to use.
+        /*!
+         * \param sources Structure defining which external sources to use.
+         *
+         * \remarks At least one of the structures for external sources must
+         * be enabled. If none of them are, the /dev/urandom one will be
+         * automatically enabled.
+         */
+        void SetSources(NuRandom_ExternalSources sources);
 
         //! Get the next random number
         /*!
