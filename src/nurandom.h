@@ -35,15 +35,26 @@
 //! The size of the memory pool of random ints (in 64bit Integers)
 #define MEMORY_POOL_SIZE 256
 
-//! The struct for the external sources toggles
+//! The struct for the external sources weights
+/*!
+ * Here, you set the weights for each of the potential external sources.
+ * A higher number indicates a lower weight. E.g., a 1 would be the highest
+ * weight possible.
+ *
+ * Zero (0) is a special case, however. A weight of 0 means that the
+ * particular external source is disabled.
+ *
+ * \remarks At least one of the external sources available must be enabled.
+ * If none are, then Urandom becomes the default.
+ */
 struct NuRandom_ExternalSources
 {
-    //! Use /dev/urandom (T/F)
-    bool Urandom;
+    //! Use /dev/urandom
+    uint Urandom;
 
     #ifdef NU_USE_RANDOMORG
-    //! Use random.org (T/F) (only compiled in when NU_USE_RANDOMORG is defined)
-    bool RandomOrg
+    //! Use random.org (only compiled in when NU_USE_RANDOMORG is defined)
+    uint RandomOrg
     #endif
 };
 
