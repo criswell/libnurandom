@@ -41,8 +41,10 @@ struct NuRandom_ExternalSources
     //! Use /dev/urandom (T/F)
     bool Urandom;
 
-    //! Use random.org (T/F)
+    #ifdef NU_USE_RANDOMORG
+    //! Use random.org (T/F) (only compiled in when NU_USE_RANDOMORG is defined)
     bool RandomOrg
+    #endif
 };
 
 class NuRandom
@@ -55,6 +57,8 @@ class NuRandom
         NuRandom_ExternalSources mySources;
 
         void setSources(NuRanndom_ExternalSources sources);
+
+        void populatePool();
 
     public:
         //! Default constructor for nurandom class
