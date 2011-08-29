@@ -74,13 +74,9 @@ class NuRandom
         int64_t sourcePool[SOURCE_POOL_SIZE];
         int currentSource;
 
-        int fileID;
-        bool isFileOpen;
-
-        bool openFile(char *filename);
-        void closeFile();
-
         void setSources(NuRanndom_ExternalSources sources);
+
+        void populatePoolFromFile(char *filename, int64_t *array, int arrayLen);
 
         void populateSourcePool();
 

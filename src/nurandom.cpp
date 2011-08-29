@@ -19,35 +19,22 @@ void NuRandom::setSources(NuRandom_ExternalSources sources)
     // TODO - setup callbacks for each for population
 }
 
-bool NuRandom::openFile(char *filename)
+void NuRandom::populatePoolFromFile(
+    char *filename, int64_t *array, int arrayLen)
 {
-    // FIXME - Would be nice if we had some locking here
-
-    // Check for existance of file
     struct stat buf;
+    int fileID;
+    int64_t randomNum;
+
     if(stat(filename, &buf) == 0) {
         fileID = open(filename, O_RDONLY);
-        isFileOpen = true;
-        return true;
+
+        for(int i = 0; i < arrayLen; i++) {
+            read(fileID, &randomNum, sizeof randomNum);
+            array[i] = randomNum;
+        }
     } else {
         // File not found
-        return false;
-    }
-}
-
-void NuRandom::closeFile();
-{
-    if(isFileOpen) {
-        close(fileID);
-        isFileOpen = false;
-    }
-}
-
-void NuRandom::populateSourcePool()
-{
-    if(openFile("/dev/urandom")) {
-    } else {
-        // Problem openning urandom
     }
 }
 
