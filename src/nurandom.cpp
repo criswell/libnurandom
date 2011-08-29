@@ -7,6 +7,9 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
+#include <stdlib.h>
+#include <math.h>
+#include <time.h>
 
 #include "nurandom.h"
 
@@ -24,17 +27,24 @@ void NuRandom::populatePoolFromFile(
 {
     struct stat buf;
     int fileID;
-    int64_t randomNum;
 
     if(stat(filename, &buf) == 0) {
         fileID = open(filename, O_RDONLY);
 
         for(int i = 0; i < arrayLen; i++) {
+            int64_t randomNum;
             read(fileID, &randomNum, sizeof randomNum);
-            array[i] = randomNum;
+            *(array + i) = randomNum;
         }
     } else {
-        // File not found
+        // File not found or unreadable, just pull random numbers from libc
+        srandom(time(NULL));
+        int64_t randomNum;
+
+        for(int i = 0; i < arrayLen; i++) {
+            randomNum = random() % INT64_MIN
+            *(array + i) = randomNum;
+        }
     }
 }
 
