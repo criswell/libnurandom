@@ -62,14 +62,18 @@ class NuRandom
 {
     private:
         int64_t numPool[MEMORY_POOL_SIZE];
-
         int currentCount;
-
         NuRandom_ExternalSources mySources;
 
         void setSources(NuRanndom_ExternalSources sources);
 
         void populatePool();
+
+        void populatePool_Urandom();
+
+        #ifdef NU_USE_RANDOMORG
+        void populatePool_RandomOrg();
+        #endif
 
     public:
         //! Default constructor for nurandom class

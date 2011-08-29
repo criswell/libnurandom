@@ -12,7 +12,6 @@
 
 /* Private Methods */
 
-
 NuRandom::setSources(NuRandom_ExternalSources sources)
 {
     mySources = sources;
