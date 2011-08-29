@@ -12,14 +12,46 @@
 
 /* Private Methods */
 
-NuRandom::setSources(NuRandom_ExternalSources sources)
+void NuRandom::setSources(NuRandom_ExternalSources sources)
 {
     mySources = sources;
 
     // TODO - setup callbacks for each for population
 }
 
-NuRandom::populatePool()
+bool NuRandom::openFile(char *filename)
+{
+    // FIXME - Would be nice if we had some locking here
+
+    // Check for existance of file
+    struct stat buf;
+    if(stat(filename, &buf) == 0) {
+        fileID = open(filename, O_RDONLY);
+        isFileOpen = true;
+        return true;
+    } else {
+        // File not found
+        return false;
+    }
+}
+
+void NuRandom::closeFile();
+{
+    if(isFileOpen) {
+        close(fileID);
+        isFileOpen = false;
+    }
+}
+
+void NuRandom::populateSourcePool()
+{
+    if(openFile("/dev/urandom")) {
+    } else {
+        // Problem openning urandom
+    }
+}
+
+void NuRandom::populatePool()
 {
     // TODO
 }
@@ -29,6 +61,7 @@ NuRandom::populatePool()
 NuRandom::NuRandom(NuRandom_ExternalSources sources)
 {
     setSources(sources);
+    populateSourcePool();
     populatePool();
 }
 
@@ -36,6 +69,7 @@ NuRandom::NuRandom()
 {
     NuRandom_ExternalSources sources;
     sources.Urandom = 1;
+    sources.Crandom = 0;
     #ifdef NU_USE_RANDOMORG
     sources.RandomOrg = 0;
     #endif

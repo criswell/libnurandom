@@ -35,6 +35,9 @@
 //! The size of the memory pool of random ints (in 64bit Integers)
 #define MEMORY_POOL_SIZE 256
 
+//! The size of the source pool (for randomizing which source to use)
+#define SOURCE_POOL_SIZE 64
+
 //! The struct for the external sources weights
 /*!
  * Here, you set the weights for each of the potential external sources.
@@ -52,6 +55,9 @@ struct NuRandom_ExternalSources
     //! Use /dev/urandom
     uint Urandom;
 
+    //! Use stock C library random
+    uint Crandom;
+
     #ifdef NU_USE_RANDOMORG
     //! Use random.org (only compiled in when NU_USE_RANDOMORG is defined)
     uint RandomOrg
@@ -65,7 +71,18 @@ class NuRandom
         int currentCount;
         NuRandom_ExternalSources mySources;
 
+        int64_t sourcePool[SOURCE_POOL_SIZE];
+        int currentSource;
+
+        int fileID;
+        bool isFileOpen;
+
+        bool openFile(char *filename);
+        void closeFile();
+
         void setSources(NuRanndom_ExternalSources sources);
+
+        void populateSourcePool();
 
         void populatePool();
 
