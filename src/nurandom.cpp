@@ -36,6 +36,7 @@ void NuRandom::populatePoolFromFile(
             read(fileID, &randomNum, sizeof randomNum);
             *(array + i) = randomNum;
         }
+        close(fileID);
     } else {
         // File not found or unreadable, just pull random numbers from libc
         srandom(time(NULL));
@@ -46,6 +47,11 @@ void NuRandom::populatePoolFromFile(
             *(array + i) = randomNum;
         }
     }
+}
+
+void NuRandom::populateSourcePool()
+{
+    populatePoolFromFile("/dev/urandom", sourcePool, SOURCE_POOL_SIZE);
 }
 
 void NuRandom::populatePool()
